@@ -13,12 +13,11 @@
 
 以 n8n、Dify 为代表的画布式 Workflow，在确定性强的问题上非常有效。当业务逻辑是线性的，步骤和输入输出边界清晰，流程几乎不会随场景变化时，用流程图来描述任务是最直接、也最稳定的方式。像固定模板的报表生成、标准化数据清洗，这类问题可以通过少量高价值流程长期复用，工程重点放在稳定性和可控性上。
 
-<figure style="text-align: center;">
+<p align="center">
   <img src="images/image1.png" alt="Social media content marketing examples" style="border-radius: 8px; width: 100%;">
-  <figcaption style="margin-top: 8px; color: #666; font-style: italic; font-size: 0.9em;">
-    典型的社交媒体营销任务
-  </figcaption>
-</figure>
+  <br>
+  <em>典型的社交媒体营销任务</em>
+</p>
 
 但营销领域中的问题，很难被抽象为一条可以长期稳定运行的固定流程。这里的困难并不在于步骤是否复杂，而在于决策严重依赖实时上下文，而这些上下文本身在不断变化。
 
@@ -42,18 +41,17 @@
 
 我们构建了一套相对结构完整的目录结构，将数据、工具、流程、经验分开进行存储。每种流程SOP我们均构建一个mdc文件，并设计一套基于用户query的触发规则。与传统workflow不同的是，我们在mdc里仅会指导agent，每一步的思考方式和可用的工具列表，实际的执行依然交给agent本身判断。这会有两个好处：
 
-**Methodology > Process：** 我们在 .mdc 中注入的是**专家的方法论和思考模式**。我们告诉 Agent：“在分析 ROI 下降时，你应该先看大盘还是先看素材”、“由于你只有 A/B/C 三个工具，你应该如何组合使用它们”。
+**Methodology > Process：** 我们在 ``.mdc`` 中注入的是**专家的方法论和思考模式**。我们告诉 Agent：“在分析 ROI 下降时，你应该先看大盘还是先看素材”、“由于你只有 A/B/C 三个工具，你应该如何组合使用它们”。
 
 **自主裁决：** 我们只提供“思考的地图”和“工具箱”，至于具体先迈哪条腿、每一步怎么走，**实际的执行判断依然完全交给 Agent 本身**。
 
 以下图为例，我们尝试在marketing template中提问："对我的投放结果进行深度分析并复盘"。marketing template能够通过调用我们提供的上下文和工具，进行一个很全面的复盘报告，并给出多种维度的分析结论：
 
-<figure style="text-align: center;">
+<p align="center">
   <img src="images/image3.png" alt="Results from a marketing template campaign review" style="border-radius: 8px; width: 100%;">
-  <figcaption style="margin-top: 8px; color: #666; font-style: italic; font-size: 0.9em;">
-    Marketing Template投放复盘结果展示
-  </figcaption>
-</figure>
+  <br>
+  <em>Marketing Template投放复盘结果展示</em>
+</p>
 
 但很快我们也遇到了明显的瓶颈。mdc 本质上是一份静态上下文，一旦被加载，其中的判断假设就默认长期成立。随着行业、投放阶段和业务规模的变化，同一套模板很难持续适用。模板越丰富，触发规则越复杂，Agent 对上下文的依赖反而越重，适应变化的能力开始下降。
 
@@ -169,12 +167,11 @@ Thinkflow 天然适合作为能力和数据的连接器。读取数据库、调�
 
 **嵌套深度限制**：通过实测我们发现，Skill 之间的调用层级不宜超过三层。一旦链路过长（例如 Thinkflow 调用 Thinkflow 再调用 Atomic），模型在回溯顶层目标时极易出现"认知断片"，导致任务在中途迷失。
 
-<figure style="text-align: center;">
+<p align="center">
   <img src="images/image11.png" alt="An arena-style evaluation of LLM cost and quality on marketing tasks, powered by Noumena skill platform" style="border-radius: 8px; width: 100%;">
-  <figcaption style="margin-top: 8px; color: #666; font-style: italic; font-size: 0.9em;">
-    多Skill协同场景下不同模型的质量与开销对比
-  </figcaption>
-</figure>
+  <br>
+  <em>多Skill协同场景下不同模型的质量与开销对比</em>
+</p>
 
 **模型成本vs性能**：更现实的约束来自模型成本与执行质量之间的权衡。在当前模型能力分布下，推理质量和调用成本呈现出相关性，尚不存在既低成本又能稳定支撑复杂 Skill 编排的模型选项。在复杂 Thinkflow 场景下，如果为了控制成本而使用推理能力较弱的模型，容易出现调用失败、结构化输出不稳定等问题。因此在实际设计Skill 架构时，必须在业务稳定性和长期运行成本之间持续权衡，而无法简单依赖架构本身解决。
 
